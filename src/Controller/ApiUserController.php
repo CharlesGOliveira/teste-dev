@@ -64,6 +64,8 @@ class ApiUserController extends AbstractController
         try {
             $data = json_decode($request->getContent(), true);
 
+            $this->validateInfosToCreate($data);
+
             $user = new User();
             $user->setName($data['name']);
             $user->setAge($data['age']);
@@ -81,6 +83,33 @@ class ApiUserController extends AbstractController
         } finally {
             return $this->setResponse($return);
         }
+    }
+
+    /**
+     * Verifica se os campos obrigatórios foram informados na requisição.
+     * 
+     * @param array $data
+     * 
+     * @return bool
+     * 
+     * @throws \Exception
+     */
+    private function validateInfosToCreate(array $data)
+    {
+        $requiredFields = [
+            'name',
+            'age',
+            'city',
+            'cpf'
+        ];
+
+        foreach ($requiredFields as $required) {
+            if (empty($data[$required])) {
+                throw new Exception('Requisição inválida. ' . $required . ' é obrigatório.', 400);
+            }
+        }
+
+        return; 
     }
 
     /**
@@ -144,7 +173,7 @@ class ApiUserController extends AbstractController
             $user->setCity($data->getCity());
             $user->setCpf($data->getCpf());
     
-            $this->validateInfosToUpdate($user, $request);
+            $user = $this->validateInfosToUpdate($user, $request);
     
             $return = $em->getRepository(User::class)->update($user, $em);
 
@@ -184,7 +213,7 @@ class ApiUserController extends AbstractController
             $user->setCpf($request['cpf']);
         }
 
-        return ;
+        return $user;
     }
 
     /**

@@ -38,10 +38,7 @@ class UserRepository extends ServiceEntityRepository
         $manager->persist($user);
         $manager->flush();
 
-        return [
-            'code' => 200,
-            'message' => 'Usuário cadastrado com sucesso.'
-        ];
+        return $this->buildDefaultReturn(200, 'Usuário cadastrado com sucesso.');
     }
 
     /**
@@ -77,10 +74,7 @@ class UserRepository extends ServiceEntityRepository
         $manager->merge($user);
         $manager->flush();
 
-        return [
-            'code' => 200,
-            'message' => 'Usuário atualizado com sucesso.'
-        ];
+        return $this->buildDefaultReturn(200, 'Usuário atualizado com sucesso.');
     }
 
     /**
@@ -96,9 +90,22 @@ class UserRepository extends ServiceEntityRepository
         $manager->remove($user);
         $manager->flush();
 
+        return $this->buildDefaultReturn(200, 'Usuário excluído com sucesso.');
+    }
+
+    /**
+     * Constroí o retorno para a controller
+     * 
+     * @param int $code
+     * @param string $message
+     * 
+     * @return array
+     */
+    private function buildDefaultReturn($code, $message)
+    {
         return [
-            'code' => 200,
-            'message' => 'Usuário excluído com sucesso.'
+            'code' => $code,
+            'message' => $message
         ];
     }
 
