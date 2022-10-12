@@ -13,6 +13,8 @@ class AppFixtures extends Fixture
         $user = new User();
         $user->setName('Usuario teste 1');
         $user->setAge(21);
+        $user->setCity('NaoMeToque');
+        $user->setCpf('166.852.790-10');
 
         $manager->persist($user);
         $manager->flush();
